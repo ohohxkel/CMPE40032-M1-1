@@ -37,15 +37,11 @@
 -- push is a library that will allow us to draw our game at a virtual
 -- resolution, instead of however large our window is; used to provide
 -- a more retro aesthetic
---
--- https://github.com/Ulydev/push
 push = require 'push'
 
 -- the "Class" library we're using will allow us to represent anything in
 -- our game as code, rather than keeping track of many disparate variables and
 -- methods
---
--- https://github.com/vrld/hump/blob/master/class.lua
 Class = require 'class'
 
 -- our Paddle class, which stores position and dimensions for each Paddle
@@ -73,8 +69,7 @@ PADDLE_SPEED = 200
 ]]
 function love.load()
     -- set love's default filter to "nearest-neighbor", which essentially
-    -- means there will be no filtering of pixels (blurriness), which is
-    -- important for a nice crisp, 2D look
+    -- means there will be no filtering of pixels (blurriness).
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     -- set the title of our application window
@@ -90,7 +85,6 @@ function love.load()
     love.graphics.setFont(smallFont)
 
     -- set up our sound effects; later, we can just index this table and
-    -- call each entry's `play` method
     sounds = {
         ['paddle_hit'] = love.audio.newSource('sounds/Paddle.mp3', 'static'),
         ['score'] = love.audio.newSource('sounds/Male HIT.mp3', 'static'),
@@ -136,8 +130,7 @@ function love.load()
 end
 
 --[[
-    Called whenever we change the dimensions of our window, as by dragging
-    out its bottom corner, for example. In this case, we only need to worry
+    In this case, we only need to worry
     about calling out to `push` to handle the resizing. Takes in a `w` and
     `h` variable representing width and height, respectively.
 ]]
@@ -147,11 +140,7 @@ end
 
 --[[
     Called every frame, passing in `dt` since the last frame. `dt`
-    is short for `deltaTime` and is measured in seconds. Multiplying
-    this by any changes we wish to make in our game will allow our
-    game to perform consistently across all hardware; otherwise, any
-    changes we make will be applied as fast as possible and will vary
-    across system hardware.
+    is short for `deltaTime` and is measured in seconds.
 ]]
 function love.update(dt)
     if gameState == 'serve' then
@@ -307,8 +296,7 @@ end
 --[[
     A callback that processes key strokes as they happen, just the once.
     Does not account for keys that are held down, which is handled by a
-    separate function (`love.keyboard.isDown`). Useful for when we want
-    things to happen right away, just once, like when we want to quit.
+    separate function (`love.keyboard.isDown`).
 ]]
 function love.keypressed(key)
     -- `key` will be whatever key this callback detected as pressed
@@ -322,8 +310,8 @@ function love.keypressed(key)
     elseif key == 'escape' then
         -- the function LÖVE2D uses to quit the application
         love.event.quit()
-    -- if we press enter during either the start or serve phase, it should
-    -- transition to the next appropriate state
+    -- press enter during either the start or serve phase, 
+    -- should transition to the next appropriate state
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'serve'
@@ -331,7 +319,7 @@ function love.keypressed(key)
             gameState = 'play'
         elseif gameState == 'done' then
             -- game is simply in a restart phase here, but will set the serving
-            -- player to the opponent of whomever won for fairness!
+       
             gameState = 'serve'
 
             ball:reset()
