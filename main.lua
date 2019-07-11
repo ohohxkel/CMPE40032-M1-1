@@ -37,15 +37,13 @@
 -- push is a library that will allow us to draw our game at a virtual
 -- resolution, instead of however large our window is; used to provide
 -- a more retro aesthetic
---
--- https://github.com/Ulydev/push
+
 push = require 'push'
 
 -- the "Class" library we're using will allow us to represent anything in
 -- our game as code, rather than keeping track of many disparate variables and
 -- methods
---
--- https://github.com/vrld/hump/blob/master/class.lua
+
 Class = require 'class'
 
 -- our Paddle class, which stores position and dimensions for each Paddle
@@ -77,20 +75,19 @@ function love.load()
     -- important for a nice crisp, 2D look
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    -- set the title of our application window
+    -- title of the window
     love.window.setTitle('Pong')
 
     -- seed the RNG so that calls to random are always random
     math.randomseed(os.time())
 
-    -- initialize our nice-looking retro text fonts
+    -- initialize retro fonts
     smallFont = love.graphics.newFont('font.ttf', 8)
     largeFont = love.graphics.newFont('font.ttf', 16)
     scoreFont = love.graphics.newFont('font.ttf', 32)
     love.graphics.setFont(smallFont)
-
-    -- set up our sound effects; later, we can just index this table and
-    -- call each entry's `play` method
+    
+    -- set up for sound effects, calls each entry's when play 
     sounds = {
         ['paddle_hit'] = love.audio.newSource('sounds/Paddle.mp3', 'static'),
         ['score'] = love.audio.newSource('sounds/Male HIT.mp3', 'static'),
@@ -170,8 +167,7 @@ function love.update(dt)
         if ball:collides(player1) then
             ball.dx = -ball.dx * 1.03
             ball.x = player1.x + 5
-
-            -- keep velocity going in the same direction, but randomize it
+            -- velocity in the same direction,but randomize it
             if ball.dy < 0 then
                 ball.dy = -math.random(10, 150)
             else
@@ -184,7 +180,6 @@ function love.update(dt)
             ball.dx = -ball.dx * 1.03
             ball.x = player2.x - 4
 
-            -- keep velocity going in the same direction, but randomize it
             if ball.dy < 0 then
                 ball.dy = -math.random(10, 150)
             else
@@ -202,7 +197,7 @@ function love.update(dt)
             sounds['wall_hit']:play()
         end
 
-        -- -4 to account for the ball's size
+        -- -4 ball size
         if ball.y >= VIRTUAL_HEIGHT - 4 then
             ball.y = VIRTUAL_HEIGHT - 4
             ball.dy = -ball.dy
@@ -223,7 +218,7 @@ function love.update(dt)
                 gameState = 'done'
             else
                 gameState = 'serve'
-                -- places the ball in the middle of the screen, no velocity
+               
                 ball:reset()
             end
         end
@@ -243,9 +238,8 @@ function love.update(dt)
         end
     end
 
-    --
+
     -- paddles can move no matter what state we're in
-    --
     -- player 1
     if love.keyboard.isDown('w') then
         player1.dy = -PADDLE_SPEED
@@ -277,9 +271,6 @@ function love.update(dt)
         end
     end
 
-
-    -- update our ball based on its DX and DY only if we're in play state;
-    -- scale the velocity by dt so movement is framerate-independent
     if gameState == 'play' then
         ball:update(dt)
     end
@@ -320,7 +311,7 @@ function love.keypressed(key)
         mode = ' a friend!'
 
     elseif key == 'escape' then
-        -- the function LÖVE2D uses to quit the application
+        --function LÖVE2D uses to quit the application
         love.event.quit()
     -- if we press enter during either the start or serve phase, it should
     -- transition to the next appropriate state
@@ -330,8 +321,7 @@ function love.keypressed(key)
         elseif gameState == 'serve' then
             gameState = 'play'
         elseif gameState == 'done' then
-            -- game is simply in a restart phase here, but will set the serving
-            -- player to the opponent of whomever won for fairness!
+           
             gameState = 'serve'
 
             ball:reset()
